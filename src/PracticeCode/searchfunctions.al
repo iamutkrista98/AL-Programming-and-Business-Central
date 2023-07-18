@@ -68,6 +68,7 @@ pageextension 50140 searchFunctions extends "Customer Card"
 
             }
 
+
         }
     }
 
@@ -75,6 +76,9 @@ pageextension 50140 searchFunctions extends "Customer Card"
         Cust: Record Customer;
         Text001: Label 'Record Found';
         Text002: Label 'Record Not Found';
-        Text003: Label 'Record Found: Customer Number: %1,Customer Name: %2,Customer Address: %3';
+        Text003: Label 'Record Found: Customer Number: % \Customer Name: %2,\Customer Address: %3';
         count: Integer;
+
+
+
 }

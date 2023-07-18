@@ -81,6 +81,10 @@ page 50139 MyPage
             action(CheckOddEven)
             {
                 ApplicationArea = All;
+                Image = Calculate;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
 
                 trigger OnAction()
                 begin
@@ -91,6 +95,28 @@ page 50139 MyPage
 
 
                 end;
+            }
+
+            action("Procedure Passing Test")
+            {
+                ApplicationArea = All;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                Image = SendConfirmation;
+
+                trigger OnAction()
+                var
+                    num1: Integer;
+                    num2: Integer;
+                begin
+                    num1 := 20;
+                    num2 := TestProcedure(num2);
+                    Message('num1 is %1', num1);
+                    Message('num2 is %1', num2);
+
+                end;
+
             }
         }
 
@@ -129,4 +155,11 @@ page 50139 MyPage
         Fact: Integer;
         I: Integer;
         Factorial: Integer;
+
+    procedure TestProcedure(var num1: Integer): Integer
+    begin
+        num1 := 30;
+        exit(num1);
+
+    end;
 }

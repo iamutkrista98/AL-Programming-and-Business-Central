@@ -101,12 +101,29 @@ table 50102 PurchaseHeader
         end;
         "Posting Date" := Today;
         "User ID" := UserId;
+        PurchLine.SetRange("Document No.", "No.");
         PurchLine.Reset();
         if PurchLine.FindSet() then
             repeat
-                PurchLine.SetFilter("Document No.", Rec."No.");
                 PurchLine."Buy From Vendor" := "Buy From Vendor";
-                PurchLine.Modify();
+                PurchLine.Modify(true);
             until PurchLine.Next() = 0;
     end;
+
+    trigger OnModify()
+    var
+        PurchLine: Record PurchaseLine;
+    begin
+        if Rec."Buy From Vendor" <> xRec."Buy From Vendor" then
+            PurchLine.Delete(true);
+        PurchLine.SetRange("Document No.", "No.");
+        PurchLine.Reset();
+        if PurchLine.FindSet() then
+            repeat
+                PurchLine."Buy From Vendor" := "Buy From Vendor";
+                PurchLine.Modify(true);
+            until PurchLine.Next() = 0;
+
+    end;
+
 }
