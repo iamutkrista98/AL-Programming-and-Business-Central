@@ -90,4 +90,50 @@ codeunit 50100 "Purchase Management"
             exit(false);
     end;
 
+
+    procedure PostBillToPostedBill(var BillNo: Code[20])
+    var
+        BillingHeader: Record "Billing Header";
+        BillingLine: Record "Billing Line";
+        PostedBillingHeader: Record PostedBillingHeader;
+        PostedBillingLine: Record PostedBillingLine;
+        PurchAndRec: Record "Purchases & Payables Setup";
+        totalAmount: Decimal;
+        Item: Record Item;
+
+
+    begin
+        PurchAndRec.Get();
+        if BillingHeader.Get(BillNo) then begin
+            BillingHeader.TestField("Sell to Customer");
+            PostedBillingHeader.Init();
+            PostedBillingHeader.TransferFields(BillingHeader);
+            PostedBillingHeader.Insert(true);
+            PostedBillingHeader.Modify();
+            Clear(totalAmount);
+            BillingLine.Reset();
+            BillingLine.SetRange("Document No", BillingHeader."No.");
+            if BillingLine.FindSet() then
+                repeat
+                    PostedBillingLine.Init();
+                    PostedBillingLine.TransferFields(BillingLine);
+                    PostedBillingLine.Insert();
+                    totalAmount += BillingLine."Line Total";
+                until BillingLine.Next() = 0;
+            BillingLine.SetRange("Item No", Item."No.");
+            PostedBillingHeader."Total Amount" := totalAmount;
+            PostedBillingHeader.Modify(true);
+            BillingLine.DeleteAll(true);
+            BillingHeader.Delete();
+
+        end;
+
+
+    end;
+
+
+
+
+
+
 }

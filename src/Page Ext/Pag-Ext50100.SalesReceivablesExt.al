@@ -9,6 +9,11 @@ pageextension 50100 "Sales&ReceivablesExt" extends "Sales & Receivables Setup"
                 ApplicationArea = All;
                 TableRelation = "No. Series";
             }
+            field(billnos; Rec.billnos)
+            {
+                ApplicationArea = All;
+                TableRelation = "No. Series";
+            }
 
         }
     }

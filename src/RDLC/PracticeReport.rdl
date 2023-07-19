@@ -1009,7 +1009,7 @@
             </Textbox>
             <Image Name="Image2">
               <Source>Database</Source>
-              <Value>=Fields!CompImage.Value</Value>
+              <Value>=First(Fields!CompImage.Value, "DataSet_Result")</Value>
               <MIMEType>image/jpeg</MIMEType>
               <Sizing>FitProportional</Sizing>
               <Top>0.23556in</Top>
