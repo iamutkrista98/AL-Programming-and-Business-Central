@@ -3,6 +3,7 @@ page 50113 PostedBillingLine
     Caption = 'PostedBillingLine';
     PageType = ListPart;
     SourceTable = PostedBillingLine;
+    Editable = false;
 
     layout
     {

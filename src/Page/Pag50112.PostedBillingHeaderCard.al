@@ -3,7 +3,7 @@ page 50112 PostedBillingHeaderCard
     Caption = 'PostedBillingHeaderCard';
     PageType = Card;
     SourceTable = "PostedBillingHeader";
-    //Editable = false;
+    Editable = false;
 
 
     layout
@@ -70,5 +70,32 @@ page 50112 PostedBillingHeaderCard
             }
         }
 
+    }
+    actions
+    {
+        area(Processing)
+        {
+            action(Print)
+            {
+                ApplicationArea = All;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                Image = Print;
+
+                trigger OnAction()
+                var
+                    PostedBillHdr: Record PostedBillingHeader;
+                begin
+                    PostedBillHdr.Reset();
+                    PostedBillHdr.SetRange("No.", Rec."No.");
+                    if PostedBillHdr.FindFirst() then
+                        Report.Run(Report::BillInvoice, true, true, PostedBillHdr);
+
+
+                end;
+            }
+
+        }
     }
 }

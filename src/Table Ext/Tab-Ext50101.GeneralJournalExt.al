@@ -7,5 +7,13 @@ tableextension 50101 GeneralJournalExt extends "Gen. Journal Line"
             Caption = 'TDS Amount';
             DataClassification = ToBeClassified;
         }
+        field(50101; "Training"; Text[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50102; "Sum of Tax"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

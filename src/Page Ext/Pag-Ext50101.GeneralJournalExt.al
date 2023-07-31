@@ -10,6 +10,16 @@ pageextension 50101 GeneralJournalExt extends "General Journal"
 
 
             }
+            field("Training"; Rec.Training)
+            {
+                ApplicationArea = All;
+
+            }
+            field("Tax Amount"; Rec."Sum of Tax")
+            {
+                ApplicationArea = All;
+
+            }
 
 
         }

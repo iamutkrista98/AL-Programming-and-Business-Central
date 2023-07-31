@@ -6,7 +6,7 @@ page 50111 PostedBillingHeaderList
     SourceTable = PostedBillingHeader;
     UsageCategory = Lists;
     CardPageId = "PostedBillingHeaderCard";
-    // Editable = false;
+    Editable = false;
 
     layout
     {

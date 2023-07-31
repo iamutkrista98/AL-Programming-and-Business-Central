@@ -7,6 +7,7 @@ report 50102 PracticeReport
     RDLCLayout = 'src\RDLC\PracticeReport.rdl';
     dataset
     {
+
         dataitem(SalesInvoiceHeader; "Sales Invoice Header")
         {
             RequestFilterFields = "Sell-to Customer No.", "Order No.", "Order Date";
@@ -14,6 +15,7 @@ report 50102 PracticeReport
             column(SelltoCustomerName; "Sell-to Customer Name")
             {
             }
+            column(Sell_to_Customer_No_; "Sell-to Customer No.") { }
             column(SelltoAddress; "Sell-to Address")
             {
             }
@@ -44,15 +46,12 @@ report 50102 PracticeReport
             {
 
             }
-
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
             {
                 DataItemLink = "Document No." = field("No.");
-                DataItemLinkReference = SalesInvoiceHeader;
 
 
-                column("Inventory_No";
-                Itm.Inventory)
+                column("Inventory_No"; Itm.Inventory)
                 {
 
                 }
@@ -83,44 +82,30 @@ report 50102 PracticeReport
                 {
 
                 }
-
                 trigger OnAfterGetRecord()
                 begin
                     if Itm.Get("No.") then
                         Itm.CalcFields(Inventory);
                 end;
 
-
             }
+
+
             trigger OnPreDataItem()
+            var
+                filterText: Text;
             begin
+                filterText := SalesInvoiceHeader.GetFilters();
                 if CompInfo.Get() then
                     CompInfo.CalcFields(Picture);
 
             end;
 
+        }
 
-        }
-    }
-    requestpage
-    {
-        layout
-        {
-            area(content)
-            {
-                group(GroupName)
-                {
-                }
-            }
-        }
-        actions
-        {
-
-        }
     }
 
     var
         CompInfo: Record "Company Information";
         Itm: Record "Item";
-        Cus: Record Customer;
 }

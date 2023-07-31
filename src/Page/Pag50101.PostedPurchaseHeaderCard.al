@@ -70,29 +70,9 @@ page 50101 PostedPurchaseHeaderCard
 
     actions
     {
-        // area(Processing)
-        // {
-        //     action("Print")
-        //     {
-        //         ApplicationArea = All;
-        //         Image = Print;
-        //         Promoted = true;
-        //         PromotedIsBig = true;
-        //         PromotedCategory = Process;
-        //         trigger OnAction()
-        //         var
-        //             PostedPurch: Record PostedPurchaseHeader;
-
-        //         begin
-        //             PostedPurch.Reset();
-        //             PostedPurch.SetRange("No.", Rec."No.");
-        //             if PostedPurch.FindFirst() then
-        //                 Report.Run(Report::PracticeReport, true, true, PostedPurch);
-
-        //         end;
-
-        //     }
-
-        // }
+        area(Processing)
+        {
+            // 
+        }
     }
 }

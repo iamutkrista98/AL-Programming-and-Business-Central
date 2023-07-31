@@ -9,23 +9,29 @@ page 50139 MyPage
         {
             group(Inputs)
             {
+                Caption = 'Input Section';
                 field(Number; Number)
                 {
                     ApplicationArea = All;
-                    ShowMandatory = true;
-                    NotBlank = true;
+                }
+                field(InputText; txt)
+                {
+                    ApplicationArea = All;
+
                 }
 
             }
 
             group(Output)
             {
+                Caption = 'Output Section';
                 field(Factorial; Factorial)
                 {
                     ApplicationArea = All;
                     Editable = false;
 
                 }
+
 
             }
         }
@@ -110,12 +116,48 @@ page 50139 MyPage
                     num1: Integer;
                     num2: Integer;
                 begin
-                    num1 := 20;
+                    num1 := Number;
                     num2 := TestProcedure(num2);
                     Message('num1 is %1', num1);
                     Message('num2 is %1', num2);
 
                 end;
+
+            }
+            action(ControlStatementsEval)
+            {
+                ApplicationArea = All;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                Image = SendConfirmation;
+                trigger OnAction()
+                begin
+                    case Number of
+                        1, 2, 20:
+                            Message('The number %1 is one of 1,2 or 20', Number);
+                        10, 11, 12:
+                            Message('The number %1 is one of 10,11,12', Number);
+                        else
+                            Message('Neither 1,2,20,10,11,12');
+                    end;
+
+                    case txt of
+                        'abc':
+                            Message('Too Simple Password');
+                        '123':
+                            Message('Too Simple Password');
+                        else
+                            if StrLen(txt) > 8 then
+                                Message('The password is valid length')
+                            else
+                                Message('The password is not of valid length');
+
+                    end;
+
+
+                end;
+
 
             }
         }
@@ -155,6 +197,7 @@ page 50139 MyPage
         Fact: Integer;
         I: Integer;
         Factorial: Integer;
+        txt: Text;
 
     procedure TestProcedure(var num1: Integer): Integer
     begin

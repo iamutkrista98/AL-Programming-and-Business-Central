@@ -10,6 +10,14 @@ pageextension 50102 "G/LEntryExt" extends "G/L Entries Preview"
 
 
             }
+            field("Training"; Rec.Training)
+            {
+
+            }
+            field("Tax Sum"; Rec."Tax Sum")
+            {
+
+            }
 
         }
     }

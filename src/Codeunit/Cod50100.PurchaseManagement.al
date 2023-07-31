@@ -99,15 +99,20 @@ codeunit 50100 "Purchase Management"
         PostedBillingLine: Record PostedBillingLine;
         PurchAndRec: Record "Purchases & Payables Setup";
         totalAmount: Decimal;
+        localAmountAfterTax: Decimal;
         Item: Record Item;
+        taxAmt: Decimal;
 
 
     begin
         PurchAndRec.Get();
         if BillingHeader.Get(BillNo) then begin
             BillingHeader.TestField("Sell to Customer");
+            if BillingHeader.Type = BillingHeader.Type::" " then
+                Error('Type is mandatory before posting');
             PostedBillingHeader.Init();
             PostedBillingHeader.TransferFields(BillingHeader);
+            PostedBillingHeader.Type := BillingHeader.Type;
             PostedBillingHeader.Insert(true);
             PostedBillingHeader.Modify();
             Clear(totalAmount);
@@ -117,8 +122,12 @@ codeunit 50100 "Purchase Management"
                 repeat
                     PostedBillingLine.Init();
                     PostedBillingLine.TransferFields(BillingLine);
+                    TaxCalculation(localAmountAfterTax, BillingLine."Line Total");
+                    PostedBillingLine."Amount After Tax" := localAmountAfterTax;
                     PostedBillingLine.Insert();
+                    InsertIntoBillingLedgerEntry(BillingLine, localAmountAfterTax);
                     totalAmount += BillingLine."Line Total";
+                    taxAmt := totalAmount + 0.13 * totalAmount;
                 until BillingLine.Next() = 0;
             BillingLine.SetRange("Item No", Item."No.");
             PostedBillingHeader."Total Amount" := totalAmount;
@@ -132,8 +141,38 @@ codeunit 50100 "Purchase Management"
     end;
 
 
+    local procedure InsertIntoBillingLedgerEntry(BillingLine: Record "Billing Line"; taxAmt: Decimal)
+    var
+        BillingLedgerEntry: Record "BillingLedgerEntry";
+        BillingHeader: Record "Billing Header";
+        CusName: Text[100];
+    begin
+        BillingLedgerEntry.Init();
+        if BillingLedgerEntry.FindLast() then
+            BillingLedgerEntry."Entry No." += 1
+        else
+            BillingLedgerEntry."Entry No." := 1;
+        BillingLedgerEntry."Document No." := BillingLine."Document No";
+        BillingLedgerEntry."Item No." := BillingLine."Item No";
+        BillingLedgerEntry."Unit Price" := BillingLine."Unit Price";
+        BillingLedgerEntry."Line Total" := taxAmt;
+        BillingLedgerEntry.Quantity := BillingLine.Qty;
+        getCustomerNoFromBillingHeader(BillingLine."Document No", CusName);
+        BillingLedgerEntry."Customer Name" := CusName;
+        BillingLedgerEntry.Insert();
 
 
+    end;
+
+
+
+    local procedure getCustomerNoFromBillingHeader(DocNo: Code[20]; var cusName: Text[100])
+    var
+        BillingHeader: Record "Billing Header";
+    begin
+        if BillingHeader.Get(DocNo) then
+            cusName := BillingHeader."Customer Name";
+    end;
 
 
 }
